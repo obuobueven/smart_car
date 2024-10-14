@@ -10,7 +10,7 @@
 - HJ-IR-02红外避障传感器 x2
 - Raspberry Pi Camera Rev 1.3 x1
 - HC-SR04超声波测距传感器 x1
-- HJ-SMPcar电路板 x1(未知用途)
+- HJ-SMPcar电路板 x1
 - 导线一堆
 - 胶棒 x1; 螺丝刀 x1; 电胶布 x1
   
