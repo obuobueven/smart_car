@@ -1,4 +1,12 @@
-# 树莓派小车电机驱动程序
+# time: 2024/10/15
+# author: zxy  
+
+'''
+    >>> 树莓派小车电机驱动程序
+    使用时参照run函数，先实例化一个car类，然后初始化pwm并启动
+    修改car类中的forward、backward、left、right、stop函数实现小车的动作
+    使用pwm.ChangeDutyCycle()函数实现电机的速度控制
+'''
 
 import RPi.GPIO as gpio
 import time
