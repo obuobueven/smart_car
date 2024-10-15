@@ -1,3 +1,5 @@
+# 树莓派小车电机驱动程序
+
 # import RPi.GPIO as gpio
 import time
 
@@ -9,13 +11,16 @@ class Car:
         
         self.pin1, self.pin2, self.pin3, self.pin4, self.ENA, self.ENB = pins[:6]
 
-
+    # 设置某个电机转速，即PWM输出频率
+    def set_speed(self, wheel: int,speed: int):
+        pass
 
     def forward(self):
         print("forward")
 
     def backward(self):
         print("backward")
+
     def left(self):
         print("left")
 
