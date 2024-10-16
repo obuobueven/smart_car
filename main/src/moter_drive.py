@@ -24,7 +24,7 @@ gpio.setwarnings(False)
 gpio.setmode(gpio.BOARD)
 
 # car类实现小车轮子驱动
-class Car:
+class CarMoter(object):
     def __init__(self, pins: list):
         # 传入参数为一个数组，分别代表四个电机接口的GPIO口号，电机使能接口的GPIO口号
         if len(pins) < 6:
@@ -39,7 +39,31 @@ class Car:
         gpio.setup(self.ENA, gpio.OUT)
         gpio.setup(self.ENB, gpio.OUT)
 
+        self.pwm1 = gpio.PWM(self.ENA, 50)# 左侧电机pwwm波
+        self.pwm2 = gpio.PWM(self.ENB, 50)# 右侧电机pwm波
+        self.pwm1.start(0)
+        self.pwm2.start(0)
+    
+    # moter_speed control
+    '''
+        @brief: set motor speed
+        @param speed_left: left motor speed
+        @param speed_right: right motor speed
+        @return: None
+    '''
+    def set_speed(self, speed_left: int, speed_right: int):
+        if speed_left < 0 or speed_left > 100 or speed_right < 0 or speed_right > 100:
+            raise ValueError("duty cycle should be between 0 and 100")
+        self.pwm1.ChangeDutyCycle(speed_left)
+        self.pwm2.ChangeDutyCycle(speed_right)
 
+    # moter_action control
+    '''
+        @brief: set motor action
+        @param action: action name
+        @return: None
+    '''
+    
     def forward(self):
         gpio.output(self.pin1, gpio.HIGH)  # 将pin1接口设置为高电压
         gpio.output(self.pin2, gpio.LOW)  # 将pin2接口设置为低电压
@@ -73,36 +97,27 @@ class Car:
         gpio.output(self.pin2, gpio.LOW)
         gpio.output(self.pin3, gpio.LOW)
         gpio.output(self.pin4, gpio.LOW)
-        print("stpo")
+        print("stop")
 
 
 def run():
-    # 实例
-    car = Car(pins=[pin1,pin2,pin3,pin4,ENA,ENB])
-    # pwm初始化
-    pwm1 = gpio.PWM(car.ENA, 50)
-    pwm2 = gpio.PWM(car.ENB, 50)
 
-    # pwm开始输出
-    pwm1.start(0)
-    pwm2.start(0)
-
-    # 前进
+    car = CarMoter(pins=[pin1,pin2,pin3,pin4,ENA,ENB])
     car.forward()
     print("GO!")
 
     # 让小车每秒钟逐渐增加速度
     for i in range(6):
-        pwm1.ChangeDutyCycle(10 * i)
-        pwm2.ChangeDutyCycle(10 * i)
+        car.pwm1.ChangeDutyCycle(10 * i)
+        car.pwm2.ChangeDutyCycle(10 * i)
         time.sleep(0.2)
         print(i,"'s speed up!")
 
     print("Over")
     # 让小车停止,释放资源
     gpio.cleanup()
-    pwm1.stop()
-    pwm2.stop()
+    car.pwm1.stop()
+    car.pwm2.stop()
 
 if __name__ == "__main__":
     run()
